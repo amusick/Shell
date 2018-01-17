@@ -11,7 +11,7 @@ then
   echo 'You are root.'
 else
   echo 'You are not root.'
-  echo 'Your account was not created'
+  echo 'Your account was not created.'
   exit 1
 fi
 
