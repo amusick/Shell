@@ -4,15 +4,16 @@
 
 # Make sure the script is being executed with superuser privileges.
 # Display if the user is the root user or not.
+# If you are not root, inform user account could not be created
+
 if [[ "${UID}" -eq 0 ]]
 then
   echo 'You are root.'
 else
   echo 'You are not root.'
+  echo 'Your account was not created'
   exit 1
 fi
-
-# If you are not root, inform user account could not be created
 
 # Display the hostname
 echo "Your hostname is ${HOSTNAME}."
