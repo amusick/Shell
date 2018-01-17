@@ -9,8 +9,8 @@ then
   echo 'You are root.'
 else
   echo 'You are not root.'
+  exit 1
 fi
-exit 0
 
 # If you are not root, inform user account could not be created
 
