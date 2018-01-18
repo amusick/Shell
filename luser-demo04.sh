@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -vx
 
 # This script creates an account on the local system.
 # You will be prompted for the account name and password.
