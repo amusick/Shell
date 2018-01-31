@@ -7,7 +7,7 @@
 # Make sure the script is being executed with superuser privileges.
 if [[ "${UID}" -ne 0 ]]
 then
-  echo 'Please run with sudo or as root'
+  echo 'Please run with sudo or as root.'
 exit 1
 fi
 
