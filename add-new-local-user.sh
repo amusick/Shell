@@ -1,10 +1,13 @@
 #!/bin/bash
-
-# Add new users & generate passwords for help desk entries.
-
-# Make sure the script is being executed with superuser privileges.
 TODAY=$(date)
 HOST=$(hostname)
+# Add new users on local machine & generate passwords for help desk entries.
+# You must supply a username as an argument to the script.
+# Optionally, you can also provide a comment for the account as an argument.
+# A password will be automaticlally generated for the account.
+# The username, password, and host for the account will be displayed.
+
+# Make sure the script is being executed with superuser privileges.
 
 if [[ "${UID}" -eq 0 ]]
 then
@@ -16,19 +19,22 @@ else
 fi
 
 # If the user doesn't supply at least one argument, then give them help.
-# Ask for the user name. # Get the username (login).
-read -p 'Enter the username to create: ' USER_NAME
-
-# Ask for the real name. # Get the real name (contents for the description field).
-read -p 'Enter the name of the person who this account is for: ' COMMENT
+if [[ "${#}" -lt 1 ]]
+then
+  echo "Usage: ${0} USER_NAME [COMMENT]..."
+  echo 'Create an account on the local system with the name of USER_NAME and a comments field of COMMENT.'
+  exit 1
+fi
 
 # The first parameter is the user name.
-# The rest of the parameters are for the account comments. 
-# Generate a password. 
+USER_NAME="${1}"
 
-# Append a special character to the password.
-SPECIAL_CHARACTER=$(echo '!@#$%^&*()_+0-' | fold -w1 | shuf | head -c1)
-echo "${PASSWORD}${SPECIAL_CHARACTER}"
+# The rest of the parameters are for comments.
+shift
+COMMENT="${@}"
+
+# Generate a password. 
+PASSWORD=$(date +%s%N${RANDOM}${RANDOM} | sha256sum | head -c48)
 
 # Create the user with the password. 
 # Check to see if the useradd command succeeded.
