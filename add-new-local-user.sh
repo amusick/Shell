@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# Add new users & generate passwords for help desk entries.
+
 # Make sure the script is being executed with superuser privileges.
-# If you are not root, inform user account could not be created.
+TODAY=$(date)
+HOST=$(hostname)
 
 if [[ "${UID}" -eq 0 ]]
 then
@@ -12,32 +15,30 @@ else
   exit 1
 fi
 
+# If the user doesn't supply at least one argument, then give them help.
 # Ask for the user name. # Get the username (login).
 read -p 'Enter the username to create: ' USER_NAME
 
 # Ask for the real name. # Get the real name (contents for the description field).
 read -p 'Enter the name of the person who this account is for: ' COMMENT
 
-# Ask for the password. # Get the password.
-read -p 'Enter the password to use for the account: ' PASSWORD
+# The first parameter is the user name.
+# The rest of the parameters are for the account comments. 
+# Generate a password. 
 
-# Create the user. # Create the user with the password.
+# Append a special character to the password.
+SPECIAL_CHARACTER=$(echo '!@#$%^&*()_+0-' | fold -w1 | shuf | head -c1)
+echo "${PASSWORD}${SPECIAL_CHARACTER}"
+
+# Create the user with the password. 
 # Check to see if the useradd command succeeded.
 useradd -c "${COMMENT}" -m ${USER_NAME}
 
-# Check to see if the useradd command succeeded.
-# We don't want to tell the user tha an account was created when it hasn't been.
-if [[ "${?}" -ne 0 ]]
-then
-  echo 'The account could not be created.'
-  exit 1
-fi
-
-# Set the password for the user.# Set the password.
-# Check to see if the passwd command succeeded.
+ # Set the password.
+#Check to see if the password command succeeded.
 echo ${PASSWORD} | passwd --stdin ${USER_NAME}
 
-# Force password change on first login.
+ # Force password change on first login.
 passwd -e ${USER_NAME}
 
 # Display the username, password, and the host where the user was created.
