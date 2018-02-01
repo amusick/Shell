@@ -34,15 +34,27 @@ shift
 COMMENT="${@}"
 
 # Generate a password. 
-PASSWORD=$(date +%s%N${RANDOM}${RANDOM} | sha256sum | head -c48)
+PASSWORD=$(date +%s%N | sha256sum | head -c48)
 
 # Create the user with the password. 
-# Check to see if the useradd command succeeded.
 useradd -c "${COMMENT}" -m ${USER_NAME}
 
+# Check to see if the useradd command succeeded.
+if [[ "${?}" -ne 0 ]]
+then
+  echo 'The account could not be created.'
+  exit 1
+fi
+
  # Set the password.
-#Check to see if the password command succeeded.
 echo ${PASSWORD} | passwd --stdin ${USER_NAME}
+
+# Check to see if the password command succeeded.
+if [[ "${?}" -ne 0 ]]
+then
+  echo 'The password for the account could not be set.'
+  exit 1
+fi
 
  # Force password change on first login.
 passwd -e ${USER_NAME}
