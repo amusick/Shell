@@ -46,7 +46,7 @@ then
   exit 1
 fi
 
- # Set the password.
+# Set the password.
 echo ${PASSWORD} | passwd --stdin ${USER_NAME}
 
 # Check to see if the password command succeeded.
@@ -56,7 +56,7 @@ then
   exit 1
 fi
 
- # Force password change on first login.
+# Force password change on first login.
 passwd -e ${USER_NAME}
 
 # Display the username, password, and the host where the user was created.
